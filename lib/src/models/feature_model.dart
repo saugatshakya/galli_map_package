@@ -1,12 +1,17 @@
-import 'package:latlong2/latlong.dart';
+import 'package:galli_map/galli_map.dart';
 
+/// This class represents a geographic feature, consisting of a `type`,
+/// `properties`, and `geometry`. It can be parsed from and converted to JSON.
 class FeatureModel {
   String? type;
   Properties? properties;
   Geometry? geometry;
 
+  /// Constructor that creates a new `FeatureModel` with the given `type`,
+  /// `properties`, and `geometry`.
   FeatureModel({this.type, this.properties, this.geometry});
 
+  /// Constructor that creates a new `FeatureModel` from a JSON map.
   FeatureModel.fromJson(Map<String, dynamic> json) {
     type = json['type'];
     properties = json['properties'] != null
@@ -16,6 +21,7 @@ class FeatureModel {
         json['geometry'] != null ? Geometry.fromJson(json['geometry']) : null;
   }
 
+  /// Converts the `FeatureModel` to a JSON map.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
@@ -29,17 +35,23 @@ class FeatureModel {
   }
 }
 
+/// This class represents the properties of a geographic feature, consisting
+/// of a `distance` and a `category`. It can be parsed from and converted to JSON.
 class Properties {
   double? distance;
   String? category;
 
+  /// Constructor that creates a new `Properties` object with the given
+  /// `distance` and `category`.
   Properties({this.distance, this.category});
 
+  /// Constructor that creates a new `Properties` object from a JSON map.
   Properties.fromJson(Map<String, dynamic> json) {
     distance = json['distance'];
     category = json['category'];
   }
 
+  /// Converts the `Properties` object to a JSON map.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['distance'] = distance;
@@ -48,13 +60,19 @@ class Properties {
   }
 }
 
+/// This class represents the geometric shape of a geographic feature, consisting
+/// of a `type`, `coordinates`, and `listOfCoordinates`. It can be parsed from
+/// and converted to JSON.
 class Geometry {
   FeatureType? type;
   List<LatLng>? coordinates;
   List<List<LatLng>>? listOfCoordinates;
 
+  /// Constructor that creates a new `Geometry` object with the given `type`,
+  /// `coordinates`, and `listOfCoordinates`.
   Geometry({this.type, this.coordinates, this.listOfCoordinates});
 
+  /// Constructor that creates a new `Geometry` object from a JSON map.
   Geometry.fromJson(Map<String, dynamic> json) {
     type = stringToFeatureType(json['type']);
     coordinates = type == FeatureType.point
@@ -65,17 +83,19 @@ class Geometry {
         : null;
   }
 
+  /// Converts the `Geometry` object to a JSON map.
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['type'] = type;
     if (coordinates != null) {
       data['coordinates'] = coordinates!.map((v) => v.toJson()).toList();
     }
-    data['list_of)coordinates'] = listOfCoordinates!;
+    data['list_of_coordinates'] = listOfCoordinates!;
     return data;
   }
 }
 
+/// Convert a string to a [FeatureType] enum
 FeatureType stringToFeatureType(String string) {
   try {
     return FeatureType.values.byName(string.toLowerCase());
@@ -84,9 +104,13 @@ FeatureType stringToFeatureType(String string) {
   }
 }
 
-jibbrishToCoordinates(List jibbrish, FeatureType type) {
+/// Convert a list of coordinates in "jibbrish" format to a list of [LatLng] objects
+/// If the [FeatureType] is a multipolygon or multilinestring, then the function returns
+/// a list of [List<LatLng>] representing the holes and polygons respectively
+List<dynamic> jibbrishToCoordinates(List jibbrish, FeatureType type) {
   List<LatLng> coordinates = [];
   List<List<LatLng>> listOfCoordinates = [];
+
   switch (type) {
     case FeatureType.point:
       LatLng latlng = LatLng(jibbrish[1], jibbrish[0]);
@@ -120,4 +144,5 @@ jibbrishToCoordinates(List jibbrish, FeatureType type) {
   return [coordinates, listOfCoordinates];
 }
 
+/// An enum to represent the different types of features in GeoJSON
 enum FeatureType { point, multilinestring, multipolygon, other }

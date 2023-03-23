@@ -22,16 +22,40 @@ Marker userLocation({required LatLng latLng, Widget? marker}) => Marker(
                   child: SizedBox(
                       width: 20,
                       height: 20,
-                      child: Icon(Icons.keyboard_arrow_up_outlined))),
+                      child: Icon(
+                        Icons.keyboard_arrow_up_outlined,
+                        color: Colors.black,
+                        weight: 4,
+                        shadows: [
+                          BoxShadow(
+                              blurRadius: 4,
+                              color: Colors.black38,
+                              offset: Offset(
+                                2,
+                                2,
+                              ),
+                              spreadRadius: 2)
+                        ],
+                      ))),
               Center(
                 child: marker ??
                     Container(
                         width: 16,
                         height: 16,
                         decoration: BoxDecoration(
-                            color: Colors.red,
+                            boxShadow: const [
+                              BoxShadow(
+                                  blurRadius: 4,
+                                  color: Colors.black38,
+                                  offset: Offset(
+                                    2,
+                                    2,
+                                  ),
+                                  spreadRadius: 2)
+                            ],
+                            color: Colors.orange,
                             shape: BoxShape.circle,
-                            border: Border.all(width: 2, color: Colors.white))),
+                            border: Border.all(width: 2, color: Colors.black))),
               ),
             ]),
           );

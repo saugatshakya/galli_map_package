@@ -1,7 +1,7 @@
 name: galli_map
-description: A new Flutter package project.
+description: A Galli map widget that displays a map with custom markers, lines, circles and polygons. 
 version: 0.0.1
-homepage:
+homepage: https://www.gallimaps.com
 
 environment:
   sdk: '>=2.12.0<3.0.0'

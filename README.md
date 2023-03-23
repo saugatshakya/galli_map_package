@@ -1,39 +1,81 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# Galli Maps for Flutter
+[![pub package](https://img.shields.io/pub/v/gallimaps.svg)](https://pub.dartlang.org/packages/gallimaps)
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+Galli Maps is a Flutter package that provides a customizable map widget for displaying maps with custom markers, lines, circles, and polygons. The widget supports zooming in and out, tapping on the map, and showing the user's current location.
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
 
-## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+## Installation
 
-## Getting started
+To use this package, add galli_maps as a dependency in your pubspec.yaml file:
+```yaml
+dependencies:
+    galli_maps: ${last_version}
+```
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+Then run flutter pub get to install the package.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
+Import and add the Galli Maps widget to your project
 ```dart
-const like = 'sample';
-```
+import 'package:galli_maps/galli_maps.dart';
+... ...
 
-## Additional information
+final Galli360 controller = Galli360(token);
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+@override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: GalliMaps(
+
+           authKey: "xyz",
+           controller: controller,
+           zoom: 16,
+           onTap: (tap) {},
+           circles: [
+             GalliCircle(
+                 center: LatLng(27.12441, 67.12412),
+                 radius: 32,
+                 color: Colors.white,
+                 borderStroke: 3,
+                 borderColor: Colors.black)
+           ],
+           lines: [
+             GalliLine(
+                 line: [
+                   LatLng(27.12441, 67.12412),
+                   LatLng(27.12441, 67.12412),
+                   LatLng(27.12441, 67.12412),
+                   LatLng(27.12441, 67.12412)
+                 ],
+                 borderColor: Colors.blue,
+                 borderStroke: 1,
+                 lineColor: Colors.white,
+                 lineStroke: 2)
+           ],
+           polygons: [
+             GalliPolygon(polygon: [
+               LatLng(27.12441, 67.12412),
+               LatLng(27.12441, 67.12412),
+               LatLng(27.12441, 67.12412),
+               LatLng(27.12441, 67.12412)
+             ], borderColor: Colors.red, borderStroke: 2, color: Colors.green),
+           ],
+           markers: [
+             GalliMarker(
+                 latlng: LatLng(27.12441, 67.12412),
+                 markerWidget: const Icon(Icons.location_city))
+           ],
+         ),
+
+    );
+  }
+ ```
+
+## Preview
+![Preview](https://github.com/Gallimaps/demo.gif)

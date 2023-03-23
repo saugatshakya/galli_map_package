@@ -10,6 +10,7 @@ import 'package:galli_map/src/widgets/markers/user_location_marker.dart';
 import 'package:geolocator/geolocator.dart';
 
 class GalliMap extends StatefulWidget {
+  final String authKey;
   final double? height;
   final double? width;
   final double zoom;
@@ -34,6 +35,7 @@ class GalliMap extends StatefulWidget {
   )? onTap;
   const GalliMap(
       {Key? key,
+      required this.authKey,
       required this.controller,
       this.height,
       this.width,
@@ -139,7 +141,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                 TileLayerOptions(
                     tms: true,
                     urlTemplate:
-                        "https://map.gallimap.com/geoserver/gwc/service/tms/1.0.0/GalliMaps%3AGalliMaps@EPSG%3A3857@png/{z}/{x}/{y}.png?authkey=61f40b24-8281-11ed-b9f29f2"),
+                        "https://map.gallimap.com/geoserver/gwc/service/tms/1.0.0/GalliMaps%3AGalliMaps@EPSG%3A3857@png/{z}/{x}/{y}.png?authkey=${widget.authKey}"),
                 PolylineLayerOptions(polylines: [
                   for (GalliLine line in widget.lines) line.toPolyline(),
                 ]),
@@ -400,7 +402,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                                   16,
                                   this,
                                   mounted,
-                                  widget.controller);
+                                  widget.controller.map);
                             }
                           },
                           child: widget.currentLocationWidget ??

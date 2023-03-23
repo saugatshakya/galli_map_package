@@ -5,23 +5,19 @@ import 'package:latlong2/latlong.dart';
 class HouseModel {
   int? id;
   String? featurecode;
+
+  ///galli code by gallimaps
   int? number;
   String? houseCode;
+
+  ///house code by metropoliton
   String? maxlat;
   String? minlat;
   String? maxlong;
   String? minlong;
-  int? osmId;
   String? uniqueId;
-  String? bin;
   String? streetCode;
-  String? metAddress;
-  String? ownerName;
-  String? buildingRemark;
   String? ward;
-  String? picture;
-  String? objectId;
-  String? type;
   String? streetNameEn;
   LatLng? center;
   Address? address;
@@ -36,17 +32,9 @@ class HouseModel {
     this.minlat,
     this.maxlong,
     this.minlong,
-    this.osmId,
     this.uniqueId,
-    this.bin,
     this.streetCode,
-    this.metAddress,
-    this.ownerName,
-    this.buildingRemark,
     this.ward,
-    this.picture,
-    this.objectId,
-    this.type,
     this.streetNameEn,
     this.center,
     this.address,
@@ -84,17 +72,9 @@ class HouseModel {
     minlat = json['minlat'];
     maxlong = json['maxlong'];
     minlong = json['minlong'];
-    osmId = json['osm_id'];
     uniqueId = json['unique_id'];
-    bin = json['bin'].toString();
     streetCode = json['street_code'];
-    metAddress = json['met_address'];
-    ownerName = json['owner_name'];
-    buildingRemark = json['building_remark'];
     ward = json['ward'];
-    picture = json['picture'];
-    objectId = json['object_id'];
-    type = json['type'];
     streetNameEn = json['street_name_en'];
     center = json['center'] != null
         ? LatLng(double.parse(json['center']['latitude']),
@@ -121,17 +101,9 @@ class HouseModel {
     data['minlat'] = minlat;
     data['maxlong'] = maxlong;
     data['minlong'] = minlong;
-    data['osm_id'] = osmId;
     data['unique_id'] = uniqueId;
-    data['bin'] = bin;
     data['street_code'] = streetCode;
-    data['met_address'] = metAddress;
-    data['owner_name'] = ownerName;
-    data['building_remark'] = buildingRemark;
     data['ward'] = ward;
-    data['picture'] = picture;
-    data['object_id'] = objectId;
-    data['type'] = type;
     data['street_name_en'] = streetNameEn;
     if (center != null) {
       data['center'] = center!.toJson();
