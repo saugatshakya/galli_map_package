@@ -1,8 +1,8 @@
-# Galli Maps for Flutter
+# Galli Map for Flutter
 [![pub package](https://img.shields.io/pub/v/galli_map.svg)](https://pub.dartlang.org/packages/galli_map)
 
 
-Galli Maps is a Flutter package that provides a customizable map widget for displaying maps with custom markers, lines, circles, and polygons. The widget supports zooming in and out, tapping on the map, and showing the user's current location.
+Galli Map is a Flutter package that provides a customizable map widget for displaying Map with custom markers, lines, circles, and polygons. The widget supports zooming in and out, tapping on the map, and showing the user's current location.
 
 
 
@@ -18,7 +18,7 @@ Then run flutter pub get to install the package.
 
 ## Usage
 
-Import and add the Galli Maps widget to your project
+Import and add the Galli Map widget to your project
 ```dart
 import 'package:galli_map/galli_map.dart';
 ... ...
@@ -31,7 +31,7 @@ import 'package:galli_map/galli_map.dart';
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: GalliMaps(
+      body: GalliMap(
            authKey: "authToken",
            controller: controller,
            zoom: 16,
