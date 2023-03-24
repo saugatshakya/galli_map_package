@@ -37,7 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: SafeArea(
         child: Center(
           child: GalliMap(
-            authKey: "61f40b24-8281-11ed-b9f29f2",
+            authKey: "b1cc555d-025f-4123-b4b6-105e9f25f058",
             controller: controller,
             zoom: 16,
             onTap: (tap) {},

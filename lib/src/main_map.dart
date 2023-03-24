@@ -23,8 +23,8 @@ class GalliMap extends StatefulWidget {
   final List<GalliCircle> circles;
   final List<GalliPolygon> polygons;
   final bool showSearch;
-  final bool show360Button;
-  final Widget? three60Widget;
+  // final bool show360Button;
+  // final Widget? three60Widget;
   final bool showLocationButton;
   final Widget? currentLocationWidget;
   final String? searchHint;
@@ -47,8 +47,8 @@ class GalliMap extends StatefulWidget {
       this.markers = const <GalliMarker>[],
       this.onTap,
       this.showSearch = true,
-      this.show360Button = true,
-      this.three60Widget,
+      // this.show360Button = true,
+      // this.three60Widget,
       this.showLocationButton = true,
       this.currentLocationWidget,
       this.searchHint = "Find Places",
@@ -81,7 +81,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
           });
           typingWaiter!.cancel();
           List<AutoCompleteModel> tempData =
-              await galliMethods.autoComplete(_search.text);
+              await galliMethods!.autoComplete(_search.text);
           List<AutoCompleteModel> data = tempData.toSet().toList();
           if (data.isNotEmpty) {
             autocompleteResults = data;
@@ -96,9 +96,9 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
   }
 
   locationaServicesInitiate() async {
-    currentLocation = await galliMethods.getCurrentLocation();
+    currentLocation = await galliMethods!.getCurrentLocation();
     setState(() {});
-    galliMethods.streamCurrentLocation().listen((event) {
+    galliMethods!.streamCurrentLocation().listen((event) {
       if (isFromNepal(event.toLatLng())) {
         currentLocation = event;
         setState(() {});
@@ -106,8 +106,11 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
     });
   }
 
+  GalliMethods? galliMethods;
+
   @override
   void initState() {
+    galliMethods = GalliMethods(widget.authKey);
     locationaServicesInitiate();
     super.initState();
   }
@@ -321,83 +324,83 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                   right: 16,
                   child: Column(
                     children: [
-                      if (widget.show360Button)
-                        GestureDetector(
-                          onTap: () async {
-                            if (!loading) {
-                              if (images.isEmpty) {
-                                setState(() {
-                                  loading = true;
-                                });
-                                images = await galliMethods
-                                    .get360ImagePoints(widget.controller.map);
-                                setState(() {
-                                  loading = false;
-                                });
-                              } else {
-                                images = [];
-                              }
-                              setState(() {});
-                            }
-                          },
-                          child: widget.three60Widget ??
-                              Card(
-                                  elevation: 4,
-                                  color: images.isEmpty
-                                      ? Colors.white
-                                      : Colors.orange,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(24)),
-                                  child: SizedBox(
-                                    width: 48,
-                                    height: 48,
-                                    child: Stack(children: [
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.only(top: 10),
-                                          child: Align(
-                                              alignment: Alignment.center,
-                                              child: Icon(
-                                                Icons.threesixty,
-                                                size: 25,
-                                                color: images.isEmpty
-                                                    ? Colors.orange
-                                                    : Colors.white,
-                                              ))),
-                                      Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 12),
-                                          child: Align(
-                                              alignment: Alignment.center,
-                                              child: Text(
-                                                "360",
-                                                style: TextStyle(
-                                                    color: images.isEmpty
-                                                        ? Colors.orange
-                                                        : Colors.white,
-                                                    fontSize: 8,
-                                                    fontWeight:
-                                                        FontWeight.w800),
-                                              ))),
-                                    ]),
-                                  )),
-                        ),
+                      // if (widget.show360Button)
+                      //   GestureDetector(
+                      //     onTap: () async {
+                      //       if (!loading) {
+                      //         if (images.isEmpty) {
+                      //           setState(() {
+                      //             loading = true;
+                      //           });
+                      //           images = await galliMethods!
+                      //               .get360ImagePoints(widget.controller.map);
+                      //           setState(() {
+                      //             loading = false;
+                      //           });
+                      //         } else {
+                      //           images = [];
+                      //         }
+                      //         setState(() {});
+                      //       }
+                      //     },
+                      //     child: widget.three60Widget ??
+                      //         Card(
+                      //             elevation: 4,
+                      //             color: images.isEmpty
+                      //                 ? Colors.white
+                      //                 : Colors.orange,
+                      //             shape: RoundedRectangleBorder(
+                      //                 borderRadius: BorderRadius.circular(24)),
+                      //             child: SizedBox(
+                      //               width: 48,
+                      //               height: 48,
+                      //               child: Stack(children: [
+                      //                 Padding(
+                      //                     padding:
+                      //                         const EdgeInsets.only(top: 10),
+                      //                     child: Align(
+                      //                         alignment: Alignment.center,
+                      //                         child: Icon(
+                      //                           Icons.threesixty,
+                      //                           size: 25,
+                      //                           color: images.isEmpty
+                      //                               ? Colors.orange
+                      //                               : Colors.white,
+                      //                         ))),
+                      //                 Padding(
+                      //                     padding:
+                      //                         const EdgeInsets.only(bottom: 12),
+                      //                     child: Align(
+                      //                         alignment: Alignment.center,
+                      //                         child: Text(
+                      //                           "360",
+                      //                           style: TextStyle(
+                      //                               color: images.isEmpty
+                      //                                   ? Colors.orange
+                      //                                   : Colors.white,
+                      //                               fontSize: 8,
+                      //                               fontWeight:
+                      //                                   FontWeight.w800),
+                      //                         ))),
+                      //               ]),
+                      //             )),
+                      //   ),
                       if (widget.showLocationButton)
                         GestureDetector(
                           onTap: () {
                             if (widget.controller.map.rotation != 0.0) {
-                              galliMethods.rotateMap(
+                              galliMethods!.rotateMap(
                                   this, mounted, widget.controller.map);
                             } else if (widget.controller.map.center !=
                                 currentLocation!.toLatLng()) {
-                              galliMethods.animateMapMove(
+                              galliMethods!.animateMapMove(
                                   currentLocation!.toLatLng(),
                                   widget.controller.map.zoom,
                                   this,
                                   mounted,
                                   widget.controller.map);
                             } else if (widget.controller.map.zoom != 16) {
-                              galliMethods.animateMapMove(
+                              galliMethods!.animateMapMove(
                                   currentLocation!.toLatLng(),
                                   16,
                                   this,
