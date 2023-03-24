@@ -8,10 +8,10 @@ Galli Maps is a Flutter package that provides a customizable map widget for disp
 
 ## Installation
 
-To use this package, add galli_maps as a dependency in your pubspec.yaml file:
+To use this package, add galli_map as a dependency in your pubspec.yaml file:
 ```yaml
 dependencies:
-    galli_maps: ${latest_version}
+    galli_map: ${latest_version}
 ```
 
 Then run flutter pub get to install the package.
@@ -20,7 +20,7 @@ Then run flutter pub get to install the package.
 
 Import and add the Galli Maps widget to your project
 ```dart
-import 'package:galli_maps/galli_maps.dart';
+import 'package:galli_map/galli_map.dart';
 ... ...
 
   final GalliController controller = GalliController();
