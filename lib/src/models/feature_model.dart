@@ -97,9 +97,13 @@ class Geometry {
 
 /// Convert a string to a [FeatureType] enum
 FeatureType stringToFeatureType(String string) {
-  try {
-    return FeatureType.values.byName(string.toLowerCase());
-  } catch (e) {
+  if (string == "point") {
+    return FeatureType.point;
+  } else if (string == "multilinestring") {
+    return FeatureType.multilinestring;
+  } else if (string == "multipolygon") {
+    return FeatureType.multipolygon;
+  } else {
     return FeatureType.other;
   }
 }
