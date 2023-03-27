@@ -25,16 +25,17 @@ Marker userLocation({required LatLng latLng, Widget? marker}) => Marker(
                       child: Icon(
                         Icons.keyboard_arrow_up_outlined,
                         color: Colors.black,
-                        shadows: [
-                          BoxShadow(
-                              blurRadius: 4,
-                              color: Colors.black38,
-                              offset: Offset(
-                                2,
-                                2,
-                              ),
-                              spreadRadius: 2)
-                        ],
+                        // weight: 4,
+                        // shadows: [
+                        //   BoxShadow(
+                        //       blurRadius: 4,
+                        //       color: Colors.black38,
+                        //       offset: Offset(
+                        //         2,
+                        //         2,
+                        //       ),
+                        //       spreadRadius: 2)
+                        // ],
                       ))),
               Center(
                 child: marker ??
