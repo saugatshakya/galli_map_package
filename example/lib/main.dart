@@ -64,16 +64,16 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
             polygons: [
               GalliPolygon(
-                  polygon: [
-                    LatLng(27.684222, 85.303778),
-                    LatLng(27.684246, 85.303780),
-                    LatLng(27.684222, 85.303790),
-                    LatLng(27.684290, 85.303754),
-                  ],
-                  borderColor: Colors.red,
-                  borderStroke: 2,
-                  color: Colors.green,
-                  isFilled: true),
+                polygon: [
+                  LatLng(27.684222, 85.303778),
+                  LatLng(27.684246, 85.303780),
+                  LatLng(27.684222, 85.303790),
+                  LatLng(27.684290, 85.303754),
+                ],
+                borderColor: Colors.red,
+                borderStroke: 2,
+                color: Colors.green,
+              ),
             ],
             markers: [
               GalliMarker(

@@ -129,12 +129,11 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
           : FlutterMap(
               mapController: widget.controller.map,
               options: MapOptions(
-                  onTap: (_, __) {
+                  onTap: (__) {
                     if (widget.onTap != null) {
                       widget.onTap!(__);
                     }
                   },
-                  onLongPress: (tapPos, latLng) async {},
                   interactiveFlags: InteractiveFlag.all,
                   center: currentLocation!.toLatLng(),
                   maxZoom: widget.maxZoom,

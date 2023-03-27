@@ -7,19 +7,16 @@ class GalliPolygon {
   final Color color;
   final Color borderColor;
   final double borderStroke;
-  final bool isFilled;
 
   GalliPolygon(
       {this.color = Colors.white,
       this.borderColor = Colors.black,
       this.borderStroke = 1,
-      this.isFilled = true,
       required this.polygon});
   Polygon toPolygon() {
     return Polygon(
       points: polygon,
       color: color,
-      isFilled: isFilled,
       borderColor: borderColor,
       borderStrokeWidth: borderStroke,
     );
