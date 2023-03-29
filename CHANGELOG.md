@@ -17,3 +17,7 @@
 ## 0.0.5
 
 * Removed shadow from icon
+
+## 0.0.6
+
+* Added 360 method and buttons
