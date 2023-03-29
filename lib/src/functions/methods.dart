@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:galli_map/galli_map.dart';
 import 'package:galli_map/src/functions/api.dart';
+import 'package:galli_map/src/models/image_model.dart';
 import 'package:galli_map/src/static/url.dart';
 import 'package:galli_map/src/utils/location.dart';
 import 'package:geolocator/geolocator.dart';
@@ -84,23 +85,23 @@ class GalliMethods {
     }
   }
 
-  // Future<List<ImageModel>> get360ImagePoints(
-  //     MapController mapController) async {
-  //   String? three60ImagesString = await galliApi.get(
-  //       galliUrl.get360Points(mapController.bounds!.southWest!,
-  //           mapController.bounds!.northEast!, mapController.zoom),
-  //       accessToken);
-  //   List<ImageModel> three60ImageModel = [];
+  Future<List<ImageModel>> get360ImagePoints(
+      MapController mapController) async {
+    String? three60ImagesString = await galliApi.get(
+        galliUrl.get360Points(mapController.bounds!.southWest!,
+            mapController.bounds!.northEast!, mapController.zoom),
+        accessToken);
+    List<ImageModel> three60ImageModel = [];
 
-  //   if (three60ImagesString != null) {
-  //     List three60Images = await jsonDecode(three60ImagesString);
-  //     for (var three60ImageString in three60Images) {
-  //       ImageModel image = ImageModel.fromJson(three60ImageString);
-  //       three60ImageModel.add(image);
-  //     }
-  //   }
-  //   return three60ImageModel;
-  // }
+    if (three60ImagesString != null) {
+      List three60Images = await jsonDecode(three60ImagesString);
+      for (var three60ImageString in three60Images) {
+        ImageModel image = ImageModel.fromJson(three60ImageString);
+        three60ImageModel.add(image);
+      }
+    }
+    return three60ImageModel;
+  }
 
   Future<Position> getCurrentLocation() async {
     Position currentLocation = await Geolocator.getCurrentPosition(
