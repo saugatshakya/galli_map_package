@@ -25,3 +25,11 @@
 ## 0.0.7
 
 * Fixed Bugs: AnimateMapMove; Added back on autocomplete tap and height and width on galliMarker
+
+## 0.0.8
+
+* https shift
+
+## 0.0.9
+
+* Added onMapLoadComplete and children

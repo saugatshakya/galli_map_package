@@ -29,64 +29,91 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final GalliController controller = GalliController();
+  final GalliMethods galliMethods = GalliMethods("key");
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Center(
-          child: GalliMap(
-            authKey: "key",
-            controller: controller,
-            zoom: 16,
-            showCurrentLocation: false,
-            onTap: (tap) {},
-            circles: [
-              GalliCircle(
-                  center: LatLng(27.684222, 85.303778),
-                  radius: 54,
-                  color: Colors.white,
-                  borderStroke: 3,
-                  borderColor: Colors.black)
-            ],
-            lines: [
-              GalliLine(
-                  line: [
-                    LatLng(27.684222, 85.303778),
-                    LatLng(27.684246, 85.303780),
-                    LatLng(27.684222, 85.303790),
-                    LatLng(27.684230, 85.303778),
-                  ],
-                  borderColor: Colors.blue,
-                  borderStroke: 2,
-                  lineColor: Colors.white,
-                  lineStroke: 2)
-            ],
-            polygons: [
-              GalliPolygon(
-                polygon: [
-                  LatLng(27.684222, 85.303778),
-                  LatLng(27.684246, 85.303780),
-                  LatLng(27.684222, 85.303790),
-                  LatLng(27.684290, 85.303754),
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.8,
+              width: MediaQuery.of(context).size.width,
+              child: GalliMap(
+                onMapLoadComplete: (controller) {
+                  galliMethods.animateMapMove(LatLng(27.715191, 85.230432), 18,
+                      this, mounted, controller);
+                },
+                authKey: "key",
+                controller: controller,
+                zoom: 16,
+                showCurrentLocation: false,
+                onTap: (tap) {},
+                circles: [
+                  GalliCircle(
+                      center: LatLng(27.684222, 85.303778),
+                      radius: 54,
+                      color: Colors.white,
+                      borderStroke: 3,
+                      borderColor: Colors.black)
                 ],
-                borderColor: Colors.red,
-                borderStroke: 2,
-                color: Colors.green,
+                lines: [
+                  GalliLine(
+                      line: [
+                        LatLng(27.684222, 85.303778),
+                        LatLng(27.684246, 85.303780),
+                        LatLng(27.684222, 85.303790),
+                        LatLng(27.684230, 85.303778),
+                      ],
+                      borderColor: Colors.blue,
+                      borderStroke: 2,
+                      lineColor: Colors.white,
+                      lineStroke: 2)
+                ],
+                polygons: [
+                  GalliPolygon(
+                    polygon: [
+                      LatLng(27.684222, 85.303778),
+                      LatLng(27.684246, 85.303780),
+                      LatLng(27.684222, 85.303790),
+                      LatLng(27.684290, 85.303754),
+                    ],
+                    borderColor: Colors.red,
+                    borderStroke: 2,
+                    color: Colors.green,
+                  ),
+                ],
+                markers: [
+                  GalliMarker(
+                      latlng: LatLng(27.684222, 85.30134),
+                      anchor: Anchor.top,
+                      markerWidget: const Icon(
+                        Icons.location_history_sharp,
+                        color: Colors.white,
+                        size: 48,
+                      ))
+                ],
               ),
-            ],
-            markers: [
-              GalliMarker(
-                  latlng: LatLng(27.684222, 85.30134),
-                  anchor: Anchor.top,
-                  markerWidget: const Icon(
-                    Icons.location_history_sharp,
-                    color: Colors.white,
-                    size: 48,
-                  ))
-            ],
-          ),
+            ),
+            SizedBox(
+              height: 32,
+            ),
+            GestureDetector(
+              onTap: () {},
+              child: Container(
+                width: 132,
+                height: 48,
+                color: Colors.red,
+              ),
+            )
+          ],
         ),
       ),
     );

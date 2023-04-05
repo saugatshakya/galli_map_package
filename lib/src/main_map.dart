@@ -29,34 +29,38 @@ class GalliMap extends StatefulWidget {
   final Widget? currentLocationWidget;
   final String? searchHint;
   final GalliController controller;
+  final List<Widget> children;
+  final Function(MapController controller)? onMapLoadComplete;
   final Function(AutoCompleteModel autoCompleteData)? onTapAutoComplete;
   final Function(
     LatLng latLng,
   )? onTap;
-  const GalliMap(
-      {Key? key,
-      required this.authKey,
-      required this.controller,
-      this.height,
-      this.width,
-      this.zoom = 16,
-      this.maxZoom = 22,
-      this.minZoom = 10,
-      this.showCurrentLocation = true,
-      this.currentLocationMarker,
-      this.markers = const <GalliMarker>[],
-      this.onTap,
-      this.showSearch = true,
-      this.show360Button = true,
-      this.three60Widget,
-      this.showLocationButton = true,
-      this.currentLocationWidget,
-      this.searchHint = "Find Places",
-      this.lines = const <GalliLine>[],
-      this.circles = const <GalliCircle>[],
-      this.polygons = const <GalliPolygon>[],
-      this.onTapAutoComplete})
-      : super(key: key);
+  const GalliMap({
+    Key? key,
+    required this.authKey,
+    required this.controller,
+    this.height,
+    this.width,
+    this.zoom = 16,
+    this.maxZoom = 22,
+    this.minZoom = 10,
+    this.showCurrentLocation = true,
+    this.currentLocationMarker,
+    this.markers = const <GalliMarker>[],
+    this.onTap,
+    this.showSearch = true,
+    this.show360Button = true,
+    this.three60Widget,
+    this.showLocationButton = true,
+    this.currentLocationWidget,
+    this.searchHint = "Find Places",
+    this.lines = const <GalliLine>[],
+    this.circles = const <GalliCircle>[],
+    this.polygons = const <GalliPolygon>[],
+    this.onTapAutoComplete,
+    this.onMapLoadComplete,
+    this.children = const <Widget>[],
+  }) : super(key: key);
 
   @override
   State<GalliMap> createState() => _GalliMapState();
@@ -118,6 +122,11 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width,
@@ -131,6 +140,11 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
           : FlutterMap(
               mapController: widget.controller.map,
               options: MapOptions(
+                  onMapCreated: (controller) {
+                    if (widget.onMapLoadComplete != null) {
+                      widget.onMapLoadComplete!(controller);
+                    }
+                  },
                   onPositionChanged: (pos, __) {
                     center = pos.center!;
                   },
@@ -184,6 +198,8 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                 ]),
               ],
               nonRotatedChildren: [
+                if (widget.children.isNotEmpty)
+                  for (Widget child in widget.children) child,
                 if (showSearch)
                   Container(
                     width: widget.width ?? MediaQuery.of(context).size.width,
