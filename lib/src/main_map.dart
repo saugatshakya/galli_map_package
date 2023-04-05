@@ -70,6 +70,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
   List<ImageModel> images = [];
   Timer? typingWaiter;
   bool loading = false;
+  LatLng center = LatLng(27.697297, 85.329238);
 
   typingWait() async {
     if (_search.text.length > 2) {
@@ -97,6 +98,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
 
   locationaServicesInitiate() async {
     currentLocation = await galliMethods!.getCurrentLocation();
+    center = currentLocation!.toLatLng();
     setState(() {});
     galliMethods!.streamCurrentLocation().listen((event) {
       if (isFromNepal(event.toLatLng())) {
@@ -129,13 +131,16 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
           : FlutterMap(
               mapController: widget.controller.map,
               options: MapOptions(
+                  onPositionChanged: (pos, __) {
+                    center = pos.center!;
+                  },
                   onTap: (__) {
                     if (widget.onTap != null) {
                       widget.onTap!(__);
                     }
                   },
                   interactiveFlags: InteractiveFlag.all,
-                  center: currentLocation!.toLatLng(),
+                  center: center,
                   maxZoom: widget.maxZoom,
                   minZoom: widget.minZoom,
                   zoom: widget.zoom),
@@ -193,10 +198,16 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                           for (AutoCompleteModel autoCompleteData
                               in autocompleteResults)
                             GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (widget.onTapAutoComplete != null) {
-                                  widget.onTapAutoComplete!(autoCompleteData);
+                                  await widget
+                                      .onTapAutoComplete!(autoCompleteData);
                                 }
+                                showSearch = false;
+                                autocompleteResults = [];
+                                _search.text = autoCompleteData.name!;
+                                setState(() {});
+                                FocusManager.instance.primaryFocus?.unfocus();
                               },
                               child: Container(
                                 margin: const EdgeInsets.fromLTRB(16, 8, 16, 0),
@@ -387,6 +398,12 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                       if (widget.showLocationButton)
                         GestureDetector(
                           onTap: () {
+                            // galliMethods!.animateMapMove(
+                            //     LatLng(27.728351, 85.301382),
+                            //     18,
+                            //     this,
+                            //     mounted,
+                            //     widget.controller.map);
                             if (widget.controller.map.rotation != 0.0) {
                               galliMethods!.rotateMap(
                                   this, mounted, widget.controller.map);

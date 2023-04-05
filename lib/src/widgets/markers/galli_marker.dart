@@ -4,6 +4,10 @@ import 'package:galli_map/galli_map.dart';
 
 /// A class that represents a marker on a `FlutterMap`.
 class GalliMarker {
+  final double height;
+
+  final double width;
+
   /// The location of the marker.
   final LatLng latlng;
 
@@ -19,6 +23,8 @@ class GalliMarker {
   /// [markerWidget] The widget to be used as the marker.
   /// [anchor] The anchor point of the marker. Default is `Anchor.center`.
   const GalliMarker({
+    this.height = 32,
+    this.width = 32,
     required this.latlng,
     required this.markerWidget,
     this.anchor = Anchor.center,
@@ -27,6 +33,8 @@ class GalliMarker {
   /// Converts this instance of the [GalliMarker] class to a [Marker] object.
   Marker toMarker() {
     return Marker(
+      height: height,
+      width: width,
       point: latlng,
       builder: (_) => markerWidget,
       anchorPos: _getAnchorPos(),

@@ -40,6 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
             authKey: "key",
             controller: controller,
             zoom: 16,
+            showCurrentLocation: false,
             onTap: (tap) {},
             circles: [
               GalliCircle(

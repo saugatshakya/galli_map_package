@@ -21,3 +21,7 @@
 ## 0.0.6
 
 * Added 360 method and buttons
+
+## 0.0.7
+
+* Fixed Bugs: AnimateMapMove; Added back on autocomplete tap and height and width on galliMarker
