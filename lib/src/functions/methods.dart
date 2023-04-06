@@ -18,7 +18,6 @@ class GalliMethods {
     List<AutoCompleteModel> autoCompleteResults = [];
     if (response != [] && response != null) {
       var datas = jsonDecode(response);
-      log(datas.toString());
       for (var data in datas) {
         AutoCompleteModel autoCompleteData = AutoCompleteModel.fromJson(data);
         autoCompleteResults.add(autoCompleteData);
@@ -47,7 +46,6 @@ class GalliMethods {
   Future<HouseModel?> reverse(LatLng latLng) async {
     var response =
         await geoApi.get(galliUrl.reverseGeoCode(latLng), accessToken);
-    log(response);
     if (response != null) {
       var data = jsonDecode(response);
       List<LatLng> coord = [];
@@ -138,7 +136,7 @@ class GalliMethods {
     final zoomTween = Tween<double>(begin: mapController.zoom, end: destZoom);
     if (!mounted) return;
     var controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: vsync);
+        duration: const Duration(milliseconds: 2000), vsync: vsync);
     Animation<double> animation =
         CurvedAnimation(parent: controller, curve: Curves.decelerate);
     controller.addListener(() {
@@ -162,7 +160,7 @@ class GalliMethods {
     final rotateTween = Tween<double>(begin: mapController.rotation, end: 0.0);
     if (!mounted) return;
     var controller = AnimationController(
-        duration: const Duration(milliseconds: 500), vsync: vsync);
+        duration: const Duration(milliseconds: 2000), vsync: vsync);
     Animation<double> animation =
         CurvedAnimation(parent: controller, curve: Curves.decelerate);
     controller.addListener(() {

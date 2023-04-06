@@ -33,3 +33,7 @@
 ## 0.0.9
 
 * Added onMapLoadComplete and children
+
+## 0.1.0
+
+* Added marker cluster and 360 viewer

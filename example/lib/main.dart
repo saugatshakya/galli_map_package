@@ -32,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final GalliController controller = GalliController();
   final GalliMethods galliMethods = GalliMethods("key");
+
   @override
   void initState() {
     super.initState();
@@ -47,15 +48,22 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               height: MediaQuery.of(context).size.height * 0.8,
               width: MediaQuery.of(context).size.width,
               child: GalliMap(
-                onMapLoadComplete: (controller) {
-                  galliMethods.animateMapMove(LatLng(27.715191, 85.230432), 18,
-                      this, mounted, controller);
+                onMapLoadComplete: (controller) async {
+                  // galliMethods.animateMapMove(LatLng(27.709857, 85.339195), 18,
+                  //     this, mounted, controller);
                 },
                 authKey: "key",
                 controller: controller,
                 zoom: 16,
                 showCurrentLocation: false,
                 onTap: (tap) {},
+                on360MarkerTap: (image) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => Viewer(
+                            image: image,
+                          )));
+                },
+                onMapUpdate: (event) {},
                 circles: [
                   GalliCircle(
                       center: LatLng(27.684222, 85.303778),
@@ -90,7 +98,25 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                     color: Colors.green,
                   ),
                 ],
+                markerClusterWidget: (context, list) {
+                  return Container(
+                    width: 20,
+                    height: 20,
+                    color: Colors.red,
+                    child: Center(
+                      child: Text(list.length.toString()),
+                    ),
+                  );
+                },
                 markers: [
+                  GalliMarker(
+                      latlng: LatLng(27.684222, 85.30134),
+                      anchor: Anchor.top,
+                      markerWidget: const Icon(
+                        Icons.location_history_sharp,
+                        color: Colors.white,
+                        size: 48,
+                      )),
                   GalliMarker(
                       latlng: LatLng(27.684222, 85.30134),
                       anchor: Anchor.top,
@@ -102,17 +128,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 ],
               ),
             ),
-            SizedBox(
-              height: 32,
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: 132,
-                height: 48,
-                color: Colors.red,
-              ),
-            )
           ],
         ),
       ),

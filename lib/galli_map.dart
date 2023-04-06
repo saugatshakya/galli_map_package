@@ -11,5 +11,5 @@ export './src/models/feature_model.dart';
 export './src/models/auto_complete.dart';
 export './src/functions/methods.dart';
 export './src/models/galli_controller.dart';
-
+export './src/widgets/viewer/galli360viewer.dart' hide LatLng;
 export 'package:latlong2/latlong.dart';

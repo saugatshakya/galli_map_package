@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:galli_map/src/models/feature_model.dart';
 import 'package:latlong2/latlong.dart';
 
@@ -57,7 +56,6 @@ class HouseModel {
     if (json['coordinate'] != null) {
       coordinate = <LatLng>[];
       json['coordinate'].forEach((v) {
-        log(v.toString());
         coordinate!.add(LatLng(v['coordinates'][1], v['coordinates'][0]));
       });
     }

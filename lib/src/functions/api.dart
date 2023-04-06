@@ -8,7 +8,6 @@ class GalliApi {
   GalliApi({required this.baseUrl});
 
   Future get(String url, String accessToken) async {
-    log(accessToken);
     var response = await http.get(
       Uri.parse("$baseUrl$url"),
       headers: <String, String>{

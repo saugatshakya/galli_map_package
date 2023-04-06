@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 class GalliUrl {
   final String baseUrl = "https://gallimaps.com";
   final String geoUrl = "https://route.gallimap.com";
+
   String get360Points(LatLng minlatlng, LatLng maxLatlng, zoomLevel) =>
       "/streetmarker/${minlatlng.latitude},${minlatlng.longitude}/${maxLatlng.latitude},${maxLatlng.longitude}/$zoomLevel";
   String reverseGeoCode(LatLng latLng) =>
