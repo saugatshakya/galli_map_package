@@ -134,7 +134,6 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
         currentPermission == LocationPermission.deniedForever) {
       currentPermission = await Geolocator.requestPermission();
     }
-    log(currentPermission!.name);
     if ((currentPermission == LocationPermission.always ||
             currentPermission == LocationPermission.whileInUse) &&
         locationEnabled) {
@@ -145,7 +144,6 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
       }
       setState(() {});
       galliMethods!.streamCurrentLocation().listen((event) {
-        log(event.toString());
         if (isFromNepal(event.toLatLng())) {
           currentLocation = event;
           if (!mounted) {
