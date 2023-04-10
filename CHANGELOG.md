@@ -41,3 +41,7 @@
 ## 0.1.1
 
 * Location Service not required to access map
+
+## 0.1.2
+
+* Bug Fixes

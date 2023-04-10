@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:galli_map/src/static/url.dart';
 import 'package:http/http.dart' as http;
 
