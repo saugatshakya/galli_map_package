@@ -95,7 +95,6 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
   bool three60Loading = false;
   bool locationEnabled = false;
   LocationPermission? currentPermission;
-  StreamSubscription<Position>? locationListener;
 
   typingWait() async {
     if (_search.text.length > 2) {
@@ -145,7 +144,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
         return;
       }
       setState(() {});
-      locationListener = galliMethods!.streamCurrentLocation().listen((event) {
+      galliMethods!.streamCurrentLocation().listen((event) {
         log(event.toString());
         if (isFromNepal(event.toLatLng())) {
           currentLocation = event;
