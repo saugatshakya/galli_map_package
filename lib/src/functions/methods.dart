@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:galli_map/galli_map.dart';
@@ -123,6 +121,7 @@ class GalliMethods {
   Stream<Position> streamCurrentLocation() {
     return Geolocator.getPositionStream(
         desiredAccuracy: LocationAccuracy.best,
+        distanceFilter: 20,
         intervalDuration: const Duration(milliseconds: 500));
   }
 

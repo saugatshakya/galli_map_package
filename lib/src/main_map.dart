@@ -1,6 +1,5 @@
 import 'dart:async';
-import 'dart:math';
-
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_marker_cluster/flutter_map_marker_cluster.dart';
@@ -94,6 +93,9 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
   bool loading = false;
   LatLng center = LatLng(27.697297, 85.329238);
   bool three60Loading = false;
+  bool locationEnabled = false;
+  LocationPermission? currentPermission;
+  StreamSubscription<Position>? locationListener;
 
   typingWait() async {
     if (_search.text.length > 2) {
@@ -127,21 +129,33 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
   }
 
   locationaServicesInitiate() async {
-    currentLocation = await galliMethods!.getCurrentLocation();
-    center = currentLocation!.toLatLng();
-    if (!mounted) {
-      return;
+    currentPermission = await Geolocator.checkPermission();
+    locationEnabled = await Geolocator.isLocationServiceEnabled();
+    if (currentPermission == LocationPermission.denied ||
+        currentPermission == LocationPermission.deniedForever) {
+      currentPermission = await Geolocator.requestPermission();
     }
-    setState(() {});
-    galliMethods!.streamCurrentLocation().listen((event) {
-      if (isFromNepal(event.toLatLng())) {
-        currentLocation = event;
-        if (!mounted) {
-          return;
-        }
-        setState(() {});
+    log(currentPermission!.name);
+    if ((currentPermission == LocationPermission.always ||
+            currentPermission == LocationPermission.whileInUse) &&
+        locationEnabled) {
+      currentLocation = await galliMethods!.getCurrentLocation();
+      center = currentLocation!.toLatLng();
+      if (!mounted) {
+        return;
       }
-    });
+      setState(() {});
+      locationListener = galliMethods!.streamCurrentLocation().listen((event) {
+        log(event.toString());
+        if (isFromNepal(event.toLatLng())) {
+          currentLocation = event;
+          if (!mounted) {
+            return;
+          }
+          setState(() {});
+        }
+      });
+    }
   }
 
   GalliMethods? galliMethods;
@@ -163,7 +177,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
     return SizedBox(
       width: widget.width ?? MediaQuery.of(context).size.width,
       height: widget.height ?? MediaQuery.of(context).size.height,
-      child: currentLocation == null
+      child: currentLocation == null && widget.initialPosition == null
           ? const Center(
               child: CircularProgressIndicator(
                 color: Color(0xff454545),
@@ -541,7 +555,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                                           ]),
                                   )),
                         ),
-                      if (widget.showLocationButton)
+                      if (widget.showLocationButton && locationEnabled)
                         GestureDetector(
                           onTap: () {
                             if (widget.controller.map.rotation != 0.0) {

@@ -31,7 +31,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final GalliController controller = GalliController();
-  final GalliMethods galliMethods = GalliMethods("key");
+  final GalliMethods galliMethods = GalliMethods("k61f40b24-8281-11ed-b9f29f2");
 
   @override
   void initState() {
@@ -52,9 +52,10 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   // galliMethods.animateMapMove(LatLng(27.709857, 85.339195), 18,
                   //     this, mounted, controller);
                 },
-                authKey: "key",
+                authKey: "61f40b24-8281-11ed-b9f29f2",
                 controller: controller,
                 zoom: 16,
+                initialPosition: LatLng(27.672905, 85.312215),
                 showCurrentLocation: false,
                 onTap: (tap) {},
                 on360MarkerTap: (image) {
