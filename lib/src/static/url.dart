@@ -1,22 +1,25 @@
 import 'package:latlong2/latlong.dart';
 
 class GalliUrl {
-  final String baseUrl = "https://gallimaps.com";
-  final String geoUrl = "https://route.gallimap.com";
+  final String imageUrl = "https://image-init.gallimap.com";
+  final String geoUrl = "https://route-init.gallimap.com";
 
-  String get360Points(LatLng minlatlng, LatLng maxLatlng, zoomLevel) =>
-      "/streetmarker/${minlatlng.latitude},${minlatlng.longitude}/${maxLatlng.latitude},${maxLatlng.longitude}/$zoomLevel";
-  String reverseGeoCode(LatLng latLng) =>
-      "/reverseGeoApi/reverse/generalReverse/${latLng.longitude}/${latLng.latitude}";
-  String autoComplete(String query) =>
-      "/searchApi/geojson_getAll/search/$query";
-  String search(String place, LatLng latlng) =>
-      "/searchApi/geojson_currentlocation/${latlng.latitude}/${latlng.longitude}/$place";
-  String getRoute({
-    required LatLng source,
-    required LatLng destination,
-  }) =>
-      "/routingAPI/driving?srcLat=${source.latitude}&srcLng=${source.longitude}&dstLat=${destination.latitude}&dstLng=${destination.longitude}";
+  String param(String accessToken) => "?accessToken=$accessToken";
+
+  String get360Points(
+          LatLng minlatlng, LatLng maxLatlng, zoomLevel, String accessToken) =>
+      "/api/v1/streetmarker/${minlatlng.latitude},${minlatlng.longitude}/${maxLatlng.latitude},${maxLatlng.longitude}/$zoomLevel?accessToken=$accessToken";
+  String reverseGeoCode(LatLng latLng, String accessToken) =>
+      "/api/v1/reverse/generalReverse?accessToken=$accessToken&lat=${latLng.latitude}&lng=${latLng.longitude}";
+  String autoComplete(String query, String accessToken) =>
+      "/api/v1/search/autocomplete?accessToken=$accessToken&word=$query";
+  String search(String place, LatLng latlng, String accessToken) =>
+      "/api/v1/search/currentLocation?accessToken=$accessToken&name=$place&currentLat=${latlng.latitude}&currentLng=${latlng.longitude}";
+  String getRoute(
+          {required LatLng source,
+          required LatLng destination,
+          required String accessToken}) =>
+      "/api/v1/routing?mode=driving&srcLat=${source.latitude}&srcLng=${source.longitude}&dstLat=${destination.latitude}&dstLng=${destination.longitude}&accessToken=$accessToken";
 }
 
 final GalliUrl galliUrl = GalliUrl();

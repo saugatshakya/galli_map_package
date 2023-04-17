@@ -74,7 +74,7 @@ class Geometry {
 
   /// Constructor that creates a new `Geometry` object from a JSON map.
   Geometry.fromJson(Map<String, dynamic> json) {
-    type = stringToFeatureType(json['type']);
+    type = stringToFeatureType(json['type'].toString().toLowerCase());
     coordinates = type == FeatureType.point
         ? jibbrishToCoordinates(json['coordinates'], type!)[0]
         : null;
@@ -90,7 +90,7 @@ class Geometry {
     if (coordinates != null) {
       data['coordinates'] = coordinates!.map((v) => v.toJson()).toList();
     }
-    data['list_of_coordinates'] = listOfCoordinates!;
+    data['list_of_coordinates'] = listOfCoordinates ?? [];
     return data;
   }
 }

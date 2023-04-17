@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:galli_map/galli_map.dart';
@@ -12,10 +13,11 @@ class GalliMethods {
   final String accessToken;
   GalliMethods(this.accessToken);
   Future<List<AutoCompleteModel>> autoComplete(String query) async {
-    var response = await geoApi.get(galliUrl.autoComplete(query), accessToken);
+    var response = await geoApi.get(
+        galliUrl.autoComplete(query, accessToken), accessToken);
     List<AutoCompleteModel> autoCompleteResults = [];
     if (response != [] && response != null) {
-      var datas = jsonDecode(response);
+      var datas = jsonDecode(response)["data"];
       for (var data in datas) {
         AutoCompleteModel autoCompleteData = AutoCompleteModel.fromJson(data);
         autoCompleteResults.add(autoCompleteData);
@@ -26,11 +28,12 @@ class GalliMethods {
 
   Future<FeatureModel?> search(String query, LatLng location) async {
     var response = await geoApi.get(
-        galliUrl.search(query, LatLng(location.latitude, location.longitude)),
+        galliUrl.search(
+            query, LatLng(location.latitude, location.longitude), accessToken),
         accessToken);
     if (response != [] && response != null) {
       List<FeatureModel> features = [];
-      var datas = jsonDecode(response)["features"];
+      var datas = jsonDecode(response)["data"]["features"];
       for (var data in datas) {
         FeatureModel featureData = FeatureModel.fromJson(data);
         features.add(featureData);
@@ -42,8 +45,8 @@ class GalliMethods {
   }
 
   Future<HouseModel?> reverse(LatLng latLng) async {
-    var response =
-        await geoApi.get(galliUrl.reverseGeoCode(latLng), accessToken);
+    var response = await geoApi.get(
+        galliUrl.reverseGeoCode(latLng, accessToken), accessToken);
     if (response != null) {
       var data = jsonDecode(response);
       List<LatLng> coord = [];
@@ -70,10 +73,11 @@ class GalliMethods {
     required LatLng destination,
   }) async {
     var response = await geoApi.get(
-        galliUrl.getRoute(source: source, destination: destination),
+        galliUrl.getRoute(
+            source: source, destination: destination, accessToken: accessToken),
         accessToken);
     if (response != null) {
-      var data = jsonDecode(response);
+      var data = jsonDecode(response)["data"];
       RouteInfo route = RouteInfo.fromJson(data["data"][0]);
       return route;
     } else {
@@ -83,14 +87,15 @@ class GalliMethods {
 
   Future<List<ImageModel>> get360ImagePoints(
       MapController mapController) async {
-    String? three60ImagesString = await galliApi.get(
+    String? three60ImagesString = await imageApi.get(
         galliUrl.get360Points(mapController.bounds!.southWest!,
-            mapController.bounds!.northEast!, mapController.zoom),
+            mapController.bounds!.northEast!, mapController.zoom, accessToken),
         accessToken);
+    log(three60ImagesString ?? "null");
     List<ImageModel> three60ImageModel = [];
-
     if (three60ImagesString != null) {
-      List three60Images = await jsonDecode(three60ImagesString);
+      List three60Images =
+          await jsonDecode(three60ImagesString)["data"]["markerList"];
       for (var three60ImageString in three60Images) {
         ImageModel image = ImageModel.fromJson(three60ImageString);
         three60ImageModel.add(image);

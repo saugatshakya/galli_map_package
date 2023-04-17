@@ -9,8 +9,6 @@ import 'package:galli_map/src/models/image_model.dart';
 import 'package:galli_map/src/utils/latlng.dart';
 import 'package:galli_map/src/utils/location.dart';
 import 'package:galli_map/src/widgets/markers/user_location_marker.dart';
-import 'package:galli_map/src/widgets/viewer/galli360viewer.dart'
-    as galliViewer;
 import 'package:geolocator/geolocator.dart';
 
 class GalliMap extends StatefulWidget {
@@ -40,11 +38,13 @@ class GalliMap extends StatefulWidget {
   final Function(AutoCompleteModel autoCompleteData)? onTapAutoComplete;
   final Function(MapEvent mapEvent)? onMapUpdate;
   final Widget Function(BuildContext, List<Marker>)? markerClusterWidget;
+  final bool show360ImageOnMarkerClick;
+  final Viewer? viewer;
+  final Offset? viewerPosition;
   final Function(
     LatLng latLng,
   )? onTap;
-  final Function(String image)? on360MarkerTap;
-  final galliViewer.Viewer? viewer;
+  final Function? on360MarkerTap;
   const GalliMap(
       {Key? key,
       required this.authKey,
@@ -73,9 +73,11 @@ class GalliMap extends StatefulWidget {
       this.initialPosition,
       this.children = const <Widget>[],
       this.onMapUpdate,
-      this.viewer,
       this.three60MarkerSize = 20,
-      this.markerClusterWidget})
+      this.markerClusterWidget,
+      this.show360ImageOnMarkerClick = true,
+      this.viewerPosition,
+      this.viewer})
       : super(key: key);
 
   @override
@@ -232,7 +234,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                     tms: true,
                     tileProvider: const CachedTileProvider(),
                     urlTemplate:
-                        "https://map.gallimap.com/geoserver/gwc/service/tms/1.0.0/GalliMaps%3AGalliMaps@EPSG%3A3857@png/{z}/{x}/{y}.png?authkey=${widget.authKey}"),
+                        "https://map-init.gallimap.com/geoserver/gwc/service/tms/1.0.0/GalliMaps%3AClean@EPSG%3A3857@png/{z}/{x}/{y}.png?accessToken=${widget.authKey}"),
                 PolylineLayerOptions(polylines: [
                   for (GalliLine line in widget.lines) line.toPolyline(),
                 ]),
@@ -246,44 +248,72 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                       circle.toCircleMarker(),
                   ],
                 ),
-                MarkerClusterLayerOptions(
-                    markers: [
-                      for (ImageModel image in images)
-                        Marker(
-                            height: widget.three60MarkerSize,
-                            point: LatLng(image.lat!, image.lng!),
-                            builder: (_) => GestureDetector(
-                                  onTap: () {
-                                    String data = encrypt(
-                                        "${image.folder}/${image.image}");
-                                    if (widget.on360MarkerTap != null) {
-                                      widget.on360MarkerTap!(data);
-                                    }
-                                  },
-                                  child: Container(
-                                    width: widget.three60MarkerSize,
-                                    height: widget.three60MarkerSize,
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        shape: BoxShape.circle,
-                                        border: Border.all(
-                                            width: 2, color: Colors.orange)),
-                                  ),
-                                )),
-                    ],
-                    builder: (context, marker) {
-                      return Container(
-                        width: 24,
-                        height: 24,
-                        decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(width: 2, color: Colors.orange)),
-                        child: Center(
-                          child: Text(marker.length.toString()),
-                        ),
-                      );
-                    }),
+                MarkerLayerOptions(
+                  markers: [
+                    for (ImageModel image in images)
+                      Marker(
+                          height: widget.three60MarkerSize,
+                          point: LatLng(image.lat!, image.lng!),
+                          builder: (_) => GestureDetector(
+                                onTap: () {
+                                  String data =
+                                      encrypt("${image.folder}/${image.image}");
+                                  if (widget.on360MarkerTap != null) {
+                                    widget.on360MarkerTap!();
+                                  }
+                                  if (widget.show360ImageOnMarkerClick) {
+                                    showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height,
+                                            child: Stack(children: [
+                                              widget.viewer == null
+                                                  ? Viewer(
+                                                      image: data,
+                                                      accessToken:
+                                                          widget.authKey,
+                                                    )
+                                                  : widget.viewerPosition ==
+                                                          null
+                                                      ? Viewer.fromViewer(
+                                                          oldViewer:
+                                                              widget.viewer!,
+                                                          newIimage: data)
+                                                      : Positioned(
+                                                          top: widget
+                                                              .viewerPosition!
+                                                              .dx,
+                                                          left: widget
+                                                              .viewerPosition!
+                                                              .dy,
+                                                          child: Viewer.fromViewer(
+                                                              oldViewer: widget
+                                                                  .viewer!,
+                                                              newIimage: data),
+                                                        )
+                                            ]),
+                                          );
+                                        });
+                                  }
+                                },
+                                child: Container(
+                                  width: widget.three60MarkerSize,
+                                  height: widget.three60MarkerSize,
+                                  decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                          width: 2, color: Colors.orange)),
+                                ),
+                              )),
+                  ],
+                ),
                 MarkerClusterLayerOptions(
                     markers: [
                       for (GalliMarker marker in widget.markers)
@@ -305,7 +335,7 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                           );
                         }),
                 MarkerLayerOptions(markers: [
-                  if (widget.showCurrentLocation)
+                  if (widget.showCurrentLocation && currentLocation != null)
                     userLocation(
                         latLng: currentLocation!.toLatLng(),
                         marker: widget.currentLocationMarker),

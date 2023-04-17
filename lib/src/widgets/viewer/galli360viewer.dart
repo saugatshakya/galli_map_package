@@ -3,12 +3,31 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:galli_map/src/functions/encrption.dart';
+import 'package:galli_map/src/static/url.dart';
 import 'package:panorama/panorama.dart';
 
 /// A widget that displays a panoramic image at the specified coordinates,
 /// with optional markers and interactive features.
 class Viewer extends StatefulWidget {
-  const Viewer({
+  Viewer.fromViewer({required Viewer oldViewer, required String newIimage}) {
+    height = oldViewer.height;
+    width = oldViewer.width;
+    loadingWidget = oldViewer.loadingWidget;
+    closeWidget = oldViewer.closeWidget;
+    pinX = oldViewer.pinX;
+    pinY = oldViewer.pinY;
+    animation = oldViewer.animation;
+    maxZoom = oldViewer.maxZoom;
+    minZoom = oldViewer.minZoom;
+    animSpeed = oldViewer.animSpeed;
+    sensitivity = oldViewer.sensitivity;
+    pinIcon = oldViewer.pinIcon;
+    onSaved = oldViewer.onSaved;
+    showClose = oldViewer.showClose;
+    accessToken = oldViewer.accessToken;
+    image = newIimage;
+  }
+  Viewer({
     Key? key,
     this.height,
     this.width,
@@ -24,55 +43,58 @@ class Viewer extends StatefulWidget {
     this.pinIcon,
     this.onSaved,
     this.showClose,
-    required this.image,
+    required this.accessToken,
+    this.image,
   }) : super(key: key);
 
   /// The coordinates of the location to display in the panoramic image.
-  final String image;
+  String? image;
 
   /// The X position of the marker, as a fraction of the width of the image.
-  final double? pinX;
+  double? pinX;
 
   /// The Y position of the marker, as a fraction of the height of the image.
-  final double? pinY;
+  double? pinY;
 
   /// The height of the panoramic image.
-  final double? height;
+  double? height;
 
   /// The width of the panoramic image.
-  final double? width;
+  double? width;
 
   /// The widget to display while the panoramic image is loading.
-  final Widget? loadingWidget;
+  Widget? loadingWidget;
 
   /// The widget to display as a close button.
-  final Widget? closeWidget;
+  Widget? closeWidget;
 
   /// Whether to show the close button.
-  final bool? showClose;
+  bool? showClose;
 
   /// Whether to animate the panoramic image when it is loaded.
-  final bool? animation;
+  bool? animation;
 
   /// The maximum zoom level allowed for the panoramic image.
-  final double? maxZoom;
+  double? maxZoom;
 
   /// The minimum zoom level allowed for the panoramic image.
-  final double? minZoom;
+  double? minZoom;
 
   /// The speed of the animation when the panoramic image is loaded.
-  final double? animSpeed;
+  double? animSpeed;
 
   /// The sensitivity of the pan and zoom controls.
-  final double? sensitivity;
+  double? sensitivity;
 
   /// The icon to use for the marker.
-  final IconData? pinIcon;
+  Widget? pinIcon;
 
   /// A callback function that is called when the marker is placed.
   ///
   /// The `x` and `y` parameters represent the marker's position as fractions of the width and height of the image, respectively.
-  final Function(double x, double y)? onSaved;
+  Function(double x, double y)? onSaved;
+
+  late String accessToken;
 
   @override
   State<Viewer> createState() => _ViewerState();
@@ -140,11 +162,17 @@ class _ViewerState extends State<Viewer> {
                         Hotspot(
                           latitude: -90.0,
                           longitude: 90.0,
-                          width: 200.0,
-                          height: 200.0,
+                          width: 500.0,
+                          height: 500.0,
                           // widget: Image.asset('images_v2/app_icon_v2.png'),
-                          widget: SvgPicture.network(
-                              "https://gallimaps.com/galliIcon.svg"),
+                          widget: Container(
+                            width: 500,
+                            decoration: BoxDecoration(
+                                shape: BoxShape.circle, color: Colors.white),
+                            padding: EdgeInsets.all(64),
+                            child: Image.network(
+                                "https://gallimap.com/images/logo.png"),
+                          ),
                         ),
                         widget.pinX != null && widget.pinY != null
                             ? Hotspot(
@@ -154,11 +182,12 @@ class _ViewerState extends State<Viewer> {
                                 height: 128.0,
                                 widget: Column(
                                   children: [
-                                    Icon(
-                                      widget.pinIcon ?? Icons.location_on,
-                                      size: 64,
-                                      color: Colors.orange,
-                                    ),
+                                    widget.pinIcon ??
+                                        Icon(
+                                          Icons.location_on,
+                                          size: 64,
+                                          color: Colors.orange,
+                                        ),
                                     const SizedBox(
                                       height: 64,
                                     )
@@ -166,7 +195,7 @@ class _ViewerState extends State<Viewer> {
                                 ),
                               )
                             : Hotspot(),
-                        widget.onSaved == null &&
+                        widget.onSaved != null &&
                                 (markerX != null && markerY != null)
                             ? Hotspot(
                                 latitude: markerX!,
@@ -175,11 +204,12 @@ class _ViewerState extends State<Viewer> {
                                 height: 128.0,
                                 widget: Column(
                                   children: [
-                                    Icon(
-                                      widget.pinIcon ?? Icons.location_on,
-                                      size: 64,
-                                      color: Colors.orange,
-                                    ),
+                                    widget.pinIcon ??
+                                        Icon(
+                                          Icons.location_on,
+                                          size: 64,
+                                          color: Colors.orange,
+                                        ),
                                     const SizedBox(
                                       height: 64,
                                     )
@@ -191,7 +221,7 @@ class _ViewerState extends State<Viewer> {
                       animSpeed: speed,
                       sensitivity: widget.sensitivity ?? 2,
                       child: Image.network(
-                          "https://image.gallimap.com/api/v1/streetview/${decrypt(widget.image)}")),
+                          "https://image-init.gallimap.com/api/v1/streetview/${decrypt(widget.image!)}${galliUrl.param(widget.accessToken)}")),
                 ),
                 widget.showClose == null || widget.showClose!
                     ? Positioned(
