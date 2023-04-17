@@ -34,8 +34,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final GalliController controller = GalliController();
-  final GalliMethods galliMethods =
-      GalliMethods("89a40903-b75a-46b6-822b-86eebad4fa36");
+  final GalliMethods galliMethods = GalliMethods("key");
 
   @override
   void initState() {
@@ -65,13 +64,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                   // galliMethods.animateMapMove(LatLng(27.709857, 85.339195), 18,
                   //     this, mounted, controller);
                 },
-                authKey: "89a40903-b75a-46b6-822b-86eebad4fa36",
+                authKey: "key",
                 controller: controller,
                 zoom: 16,
                 initialPosition: LatLng(27.672905, 85.312215),
                 showCurrentLocation: true,
                 viewer: Viewer(
-                    accessToken: "89a40903-b75a-46b6-822b-86eebad4fa36",
+                    accessToken: "key",
                     pinIcon: Icon(
                       Icons.abc,
                       size: 48,
