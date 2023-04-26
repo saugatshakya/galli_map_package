@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:galli_map/galli_map.dart';
 
@@ -49,8 +47,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           width: MediaQuery.of(context).size.width,
           child: GalliMap(
             onTapAutoComplete: (AutoCompleteModel model) async {
-              FeatureModel? feature =
-                  await galliMethods.search(model.name!, controller.map.center);
+              // FeatureModel? feature =
+              //     await galliMethods.search(model.name!, controller.map.center);
               // if (feature != null) {
               //   await galliMethods.getRoute(
               //       source: controller.map.center,
@@ -77,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                 height: 300,
                 width: 300,
                 onSaved: (x, y) {
-                  print("$x,$y");
+                  // print("$x,$y");
                 }),
             onTap: (tap) {
               galliMethods.reverse(tap);

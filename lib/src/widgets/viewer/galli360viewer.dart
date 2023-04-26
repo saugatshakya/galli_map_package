@@ -1,7 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:galli_map/src/functions/encrption.dart';
 import 'package:galli_map/src/static/url.dart';
 import 'package:panorama/panorama.dart';
