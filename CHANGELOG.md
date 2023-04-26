@@ -45,3 +45,7 @@
 ## 0.1.2
 
 * Bug Fixes
+
+## 1.0.0
+
+* Updated packages to Latest version

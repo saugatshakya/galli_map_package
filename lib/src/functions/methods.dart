@@ -125,9 +125,12 @@ class GalliMethods {
 
   Stream<Position> streamCurrentLocation() {
     return Geolocator.getPositionStream(
-        desiredAccuracy: LocationAccuracy.best,
-        distanceFilter: 20,
-        intervalDuration: const Duration(milliseconds: 500));
+      locationSettings: LocationSettings(
+        accuracy: LocationAccuracy.best,
+        distanceFilter: 8,
+        timeLimit: Duration(milliseconds: 500),
+      ),
+    );
   }
 
   Future animateMapMove(LatLng destLocation, double destZoom, vsync, mounted,

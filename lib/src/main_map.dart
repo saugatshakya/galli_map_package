@@ -184,15 +184,17 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
           : FlutterMap(
               mapController: widget.controller.map,
               options: MapOptions(
-                  plugins: [
-                    MarkerClusterPlugin(),
-                  ],
-                  onMapCreated: (controller) async {
+
+                  // plugins: [
+                  //   MarkerClusterPlugin(),
+                  // ],
+
+                  onMapReady: () async {
                     await Future.delayed(const Duration(milliseconds: 500));
                     if (widget.onMapLoadComplete != null) {
-                      widget.onMapLoadComplete!(controller);
+                      widget.onMapLoadComplete!(widget.controller.map);
                     }
-                    controller.mapEventStream.listen((event) async {
+                    widget.controller.map.mapEventStream.listen((event) async {
                       if (widget.onMapUpdate != null)
                         widget.onMapUpdate!(event);
 
@@ -219,9 +221,9 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                   onPositionChanged: (pos, __) {
                     center = pos.center!;
                   },
-                  onTap: (__) {
+                  onTap: (__, ___) {
                     if (widget.onTap != null) {
-                      widget.onTap!(__);
+                      widget.onTap!(___);
                     }
                   },
                   interactiveFlags: InteractiveFlag.all,
@@ -229,26 +231,27 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                   maxZoom: widget.maxZoom,
                   minZoom: widget.minZoom,
                   zoom: widget.zoom),
-              layers: [
-                TileLayerOptions(
-                    tms: true,
-                    tileProvider: const CachedTileProvider(),
-                    urlTemplate:
-                        "https://map-init.gallimap.com/geoserver/gwc/service/tms/1.0.0/GalliMaps%3AClean@EPSG%3A3857@png/{z}/{x}/{y}.png?accessToken=${widget.authKey}"),
-                PolylineLayerOptions(polylines: [
+              children: [
+                TileLayer(
+                  tms: true,
+                  tileProvider: CachedTileProvider(),
+                  urlTemplate:
+                      "https://map-init.gallimap.com/geoserver/gwc/service/tms/1.0.0/GalliMaps%3AClean@EPSG%3A3857@png/{z}/{x}/{y}.png?accessToken=${widget.authKey}",
+                ),
+                PolylineLayer(polylines: [
                   for (GalliLine line in widget.lines) line.toPolyline(),
                 ]),
-                PolygonLayerOptions(polygons: [
+                PolygonLayer(polygons: [
                   for (GalliPolygon polygon in widget.polygons)
                     polygon.toPolygon(),
                 ]),
-                CircleLayerOptions(
+                CircleLayer(
                   circles: [
                     for (GalliCircle circle in widget.circles)
                       circle.toCircleMarker(),
                   ],
                 ),
-                MarkerLayerOptions(
+                MarkerLayer(
                   markers: [
                     for (ImageModel image in images)
                       Marker(
@@ -314,27 +317,28 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                               )),
                   ],
                 ),
-                MarkerClusterLayerOptions(
-                    markers: [
+                MarkerClusterLayerWidget(
+                    options: MarkerClusterLayerOptions(
+                        builder: widget.markerClusterWidget ??
+                            (context, marker) {
+                              return Container(
+                                width: 24,
+                                height: 24,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                        width: 2, color: Colors.blue)),
+                                child: Center(
+                                  child: Text(marker.length.toString()),
+                                ),
+                              );
+                            },
+                        markers: [
                       for (GalliMarker marker in widget.markers)
                         marker.toMarker(),
-                    ],
-                    builder: widget.markerClusterWidget ??
-                        (context, marker) {
-                          return Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border:
-                                    Border.all(width: 2, color: Colors.blue)),
-                            child: Center(
-                              child: Text(marker.length.toString()),
-                            ),
-                          );
-                        }),
-                MarkerLayerOptions(markers: [
+                    ])),
+                MarkerLayer(markers: [
                   if (widget.showCurrentLocation && currentLocation != null)
                     userLocation(
                         latLng: currentLocation!.toLatLng(),
