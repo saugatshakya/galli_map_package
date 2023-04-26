@@ -1,3 +1,4 @@
+import 'package:example/key_constant.dart';
 import 'package:flutter/material.dart';
 import 'package:galli_map/galli_map.dart';
 
@@ -31,7 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
   final GalliController controller = GalliController();
-  final GalliMethods galliMethods = GalliMethods("key");
+  final GalliMethods galliMethods = GalliMethods(key);
 
   @override
   void initState() {
@@ -60,13 +61,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               // galliMethods.animateMapMove(LatLng(27.709857, 85.339195), 18,
               //     this, mounted, controller);
             },
-            authKey: "key",
+            authKey: key,
             controller: controller,
             zoom: 16,
             initialPosition: LatLng(27.672905, 85.312215),
             showCurrentLocation: true,
             viewer: Viewer(
-                accessToken: "key",
+                accessToken: key,
                 pinIcon: const Icon(
                   Icons.abc,
                   size: 48,

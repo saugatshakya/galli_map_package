@@ -46,6 +46,11 @@
 
 * Bug Fixes
 
+## 0.1.3
+
+* Added 360 viewer and minor fixes
+
 ## 1.0.0
 
 * Updated packages to Latest version
+
