@@ -49,3 +49,7 @@
 ## 1.0.0
 
 * Updated packages to Latest version
+
+## 1.0.1
+
+* Searchbox size made customizable

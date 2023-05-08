@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:galli_map/galli_map.dart';
+import 'package:device_preview/device_preview.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(DevicePreview(
+    enabled: false,
+    builder: (context) => const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -46,6 +50,8 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: GalliMap(
+            // searchHeight: 50,
+            // searchWidth: 300,
             onTapAutoComplete: (AutoCompleteModel model) async {
               // FeatureModel? feature =
               //     await galliMethods.search(model.name!, controller.map.center);
@@ -61,12 +67,14 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
               //     this, mounted, controller);
             },
             authKey: "key",
+            // authKey: "key",
             controller: controller,
             zoom: 16,
             initialPosition: LatLng(27.672905, 85.312215),
             showCurrentLocation: true,
             viewer: Viewer(
                 accessToken: "key",
+                // accessToken: "key",
                 pinIcon: const Icon(
                   Icons.abc,
                   size: 48,

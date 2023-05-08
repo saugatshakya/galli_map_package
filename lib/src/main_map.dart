@@ -30,6 +30,8 @@ class GalliMap extends StatefulWidget {
   final bool showLocationButton;
   final Widget? currentLocationWidget;
   final String? searchHint;
+  final double? searchHeight;
+  final double? searchWidth;
   final GalliController controller;
   final List<Widget> children;
   final LatLng? initialPosition;
@@ -64,6 +66,8 @@ class GalliMap extends StatefulWidget {
       this.showLocationButton = true,
       this.currentLocationWidget,
       this.searchHint = "Find Places",
+      this.searchHeight,
+      this.searchWidth,
       this.lines = const <GalliLine>[],
       this.circles = const <GalliCircle>[],
       this.polygons = const <GalliPolygon>[],
@@ -410,8 +414,9 @@ class _GalliMapState extends State<GalliMap> with TickerProviderStateMixin {
                       borderRadius: BorderRadius.circular(20),
                       elevation: 4,
                       child: SizedBox(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width * 0.9,
+                        height: widget.searchHeight ?? 40,
+                        width: widget.searchWidth ??
+                            MediaQuery.of(context).size.width * 0.9,
                         child: TextFormField(
                           controller: _search,
                           onTap: () {
